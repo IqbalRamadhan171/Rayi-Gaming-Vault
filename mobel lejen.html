@@ -47,18 +47,19 @@
         <div class="content">
             <div class="lengkapi-data" style="margin-bottom: 30px;">
                 <h2>Lengkapi Data</h2>
-                <form>
+                <form id="userDataForm">
                     <div style="margin-bottom: 15px;">
                         <label for="userId" style="display: block; margin-bottom: 5px;">Masukkan User ID</label>
-                        <input type="text" id="userId" name="userId" placeholder="Masukkan User ID" style="width: 95%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
+                        <input type="text" id="userId" name="userId" placeholder="Masukkan User ID" style="width: 95%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;" required>
                     </div>
                     <div style="margin-bottom: 15px;">
                         <label for="zoneId" style="display: block; margin-bottom: 5px;">Masukkan Zone ID</label>
-                        <input type="text" id="zoneId" name="zoneId" placeholder="Masukkan Zone ID" style="width: 95%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
+                        <input type="text" id="zoneId" name="zoneId" placeholder="Masukkan Zone ID" style="width: 95%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;" required>
                     </div>
                     <p style="font-size: 14px; color: #aaa;">
                         Untuk mengetahui User ID Anda, silahkan klik menu profile di bagian kiri atas pada menu utama game. User ID akan terlihat di bagian bawah Nama karakter game Anda. Silahkan masukan User ID dan Server ID Anda untuk menyelesaikan transaksi. Contoh: 12345678(1234), maka ID = 12345678 dan Server = 1234
                     </p>
+                    <div id="errorMessage" style="color: red; display: none; margin-top: 10px;">Harap isi User ID dan Zone ID sebelum melanjutkan.</div>
                 </form>
             </div>
             <div class="pilih-nominal-layanan">
@@ -117,13 +118,14 @@
 <div class="konfirmasi-pesanan" style="margin-top: 20px; background-color: #23272a; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
     <h2>Konfirmasi Pesanan</h2>
     <label for="whatsappNumber" style="display: block; margin-bottom: 5px;">Masukkan No. Whatsapp</label>
-    <input type="text" id="whatsappNumber" placeholder="Masukkan No. Whatsapp" style="width: 95%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
+    <input type="text" id="whatsappNumber" placeholder="Masukkan No. Whatsapp" style="width: 95%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;" required>
     <p style="font-size: 14px; color: #aaa;">
         * Nomor Whatsapp ini digunakan untuk menghubungi Kamu, apabila terjadi kendala seperti Salah Nickname, Salah UID, dll. Jika keberatan, boleh isi nomor HP Random. Dengan membeli otomatis saya menyetujui Ketenangan Layanan.
     </p>
-    <div class="g-recaptcha" data-sitekey="YOUR_SITE_KEY"></div> <!-- Ganti dengan site key reCAPTCHA Anda -->
-    <button style="margin-top: 10px; background-color: #e00047; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; transition: background-color 0.3s;">Beli Sekarang</button>
-</div>    
+    <div id="whatsappErrorMessage" style="color: red; display: none; margin-top: 5px;">Harap isi nomor WhatsApp sebelum melanjutkan.</div>
+    <div class="g-recaptcha" data-sitekey="YOUR_SITE_KEY"></div>
+    <button onclick="validateAndSubmit()" style="margin-top: 10px; background-color: #e00047; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; transition: background-color 0.3s;">Beli Sekarang</button>
+</div>      
                         </div>
                     </form>
                 </div>
@@ -177,7 +179,7 @@
 <script src="script ml.js"></script>
 <script>
     // Login related functions
-    function toggleLoginModal() {
+   function toggleLoginModal() {
         const modal = document.getElementById('loginModal');
         modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
     }
@@ -243,6 +245,59 @@
         document.getElementById('topupName').textContent = ''; // Menghapus nama top-up yang dipilih
         document.getElementById('paymentMethods').style.display = 'none'; // Menyembunyikan metode pembayaran
         document.getElementById('selectedTopupDisplay').style.display = 'none'; // Menyembunyikan box top-up yang dipilih
+    }
+
+    function validateUserData() {
+        const userId = document.getElementById('userId').value.trim();
+        const zoneId = document.getElementById('zoneId').value.trim();
+        const errorMessage = document.getElementById('errorMessage');
+
+        if (userId === '' || zoneId === '') {
+            errorMessage.style.display = 'block';
+            return false;
+        } else {
+            errorMessage.style.display = 'none';
+            return true;
+        }
+    }
+
+    // Modify the existing selectTopup function
+    function selectTopup(topupName) {
+        if (validateUserData()) {
+            document.getElementById('selectedTopup').value = topupName;
+            document.getElementById('topupName').textContent = topupName;
+            document.getElementById('selectedTopupDisplay').style.display = 'block';
+            document.getElementById('paymentMethods').style.display = 'block';
+        }
+    }
+
+    // Add this function to your existing <script> tag or script file
+    function validateAndSubmit() {
+        const whatsappNumber = document.getElementById('whatsappNumber').value.trim();
+        const errorMessage = document.getElementById('whatsappErrorMessage');
+
+        if (whatsappNumber === '') {
+            errorMessage.style.display = 'block';
+        } else {
+            errorMessage.style.display = 'none';
+            // Proceed with form submission or payment process
+            handlePayment(event);
+        }
+    }
+
+    // Modify the existing handlePayment function
+    function handlePayment(event) {
+        event.preventDefault();
+        if (validateUserData() && document.getElementById('whatsappNumber').value.trim() !== '') {
+            const selectedTopup = document.getElementById('selectedTopup').value;
+            if (selectedTopup) {
+                togglePaymentPopup();
+            } else {
+                alert('Silakan pilih nominal top-up terlebih dahulu.');
+            }
+        } else {
+            alert('Harap isi semua data yang diperlukan sebelum melanjutkan.');
+        }
     }
 </script>
 </html>

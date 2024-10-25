@@ -167,7 +167,7 @@
 </a>
 <div id="paymentPopup" class="modal" style="display: none;">
     <div class="modal-content">
-        <span class="close" onclick="togglePaymentPopup()">&times;</span>
+        <span class="close" onclick="closePaymentPopup()">&times;</span>
         <h2>Konfirmasi Pembayaran</h2>
         <p>Total Harga: <span id="totalPrice"></span></p>
         <img src="images\QR.jpeg" alt="QRIS" style="width: 100%; max-width: 300px;">
@@ -240,14 +240,17 @@
 
     // Tambahkan fungsi untuk menutup pop-up dan mereset pemilihan top-up
     function closePaymentPopup() {
-        togglePaymentPopup(); // Menutup pop-up
-        document.getElementById('selectedTopup').value = ''; // Mereset pemilihan top-up
-        document.getElementById('topupName').textContent = ''; // Menghapus nama top-up yang dipilih
-        document.getElementById('paymentMethods').style.display = 'none'; // Menyembunyikan metode pembayaran
-        document.getElementById('selectedTopupDisplay').style.display = 'none'; // Menyembunyikan box top-up yang dipilih
+        console.log("Closing payment popup");
+        const paymentPopup = document.getElementById('paymentPopup');
+        if (paymentPopup) {
+            paymentPopup.style.display = 'none';
+            console.log("Payment popup closed");
+        } else {
+            console.error("Payment popup element not found");
+        }
     }
 
-     function validateUserData() {
+    function validateUserData() {
         console.log("Validating user data...");
         const userId = document.getElementById('userId').value.trim();
         const zoneId = document.getElementById('zoneId').value.trim();
@@ -309,16 +312,29 @@
         }
 
         console.log("All validations passed, proceeding to payment");
-        togglePaymentPopup();
+        showPaymentPopup(); // Changed from togglePaymentPopup to showPaymentPopup
     }
 
-    // Add this function to check if the payment popup is defined
-    function togglePaymentPopup() {
-        console.log("Attempting to toggle payment popup");
+    function showPaymentPopup() {
+        console.log("Showing payment popup");
         const paymentPopup = document.getElementById('paymentPopup');
         if (paymentPopup) {
-            paymentPopup.style.display = paymentPopup.style.display === 'none' ? 'block' : 'none';
-            console.log("Payment popup toggled");
+            paymentPopup.style.display = 'block';
+            console.log("Payment popup shown");
+        } else {
+            console.error("Payment popup element not found");
+        }
+    }
+
+    // Make sure this function is present to handle the close button in the payment popup
+    function togglePaymentPopup() {
+        const paymentPopup = document.getElementById('paymentPopup');
+        if (paymentPopup) {
+            if (paymentPopup.style.display === 'block') {
+                closePaymentPopup();
+            } else {
+                showPaymentPopup();
+            }
         } else {
             console.error("Payment popup element not found");
         }

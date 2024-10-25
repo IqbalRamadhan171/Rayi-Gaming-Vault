@@ -248,55 +248,80 @@
     }
 
      function validateUserData() {
+        console.log("Validating user data...");
         const userId = document.getElementById('userId').value.trim();
         const zoneId = document.getElementById('zoneId').value.trim();
         const errorMessage = document.getElementById('errorMessage');
 
         if (userId === '' || zoneId === '') {
+            console.log("User data validation failed");
             errorMessage.style.display = 'block';
             return false;
         } else {
+            console.log("User data validation passed");
             errorMessage.style.display = 'none';
             return true;
         }
     }
 
     function validateWhatsApp() {
+        console.log("Validating WhatsApp number...");
         const whatsappNumber = document.getElementById('whatsappNumber').value.trim();
         const errorMessage = document.getElementById('whatsappErrorMessage');
 
         if (whatsappNumber === '') {
+            console.log("WhatsApp validation failed");
             errorMessage.style.display = 'block';
             return false;
         } else {
+            console.log("WhatsApp validation passed");
             errorMessage.style.display = 'none';
             return true;
         }
     }
 
     function validateTopUp() {
+        console.log("Validating top-up selection...");
         const selectedTopup = document.getElementById('selectedTopup').value;
+        console.log("Selected top-up:", selectedTopup);
         return selectedTopup !== '';
     }
 
     function handlePayment() {
+        console.log("handlePayment function called");
+
         if (!validateUserData()) {
+            console.log("User data validation failed in handlePayment");
             alert('Harap isi User ID dan Zone ID terlebih dahulu.');
             return;
         }
 
         if (!validateWhatsApp()) {
+            console.log("WhatsApp validation failed in handlePayment");
             alert('Harap isi nomor WhatsApp terlebih dahulu.');
             return;
         }
 
         if (!validateTopUp()) {
+            console.log("Top-up validation failed in handlePayment");
             alert('Silakan pilih nominal top-up terlebih dahulu.');
             return;
         }
 
-        // If all validations pass, proceed with payment
+        console.log("All validations passed, proceeding to payment");
         togglePaymentPopup();
+    }
+
+    // Add this function to check if the payment popup is defined
+    function togglePaymentPopup() {
+        console.log("Attempting to toggle payment popup");
+        const paymentPopup = document.getElementById('paymentPopup');
+        if (paymentPopup) {
+            paymentPopup.style.display = paymentPopup.style.display === 'none' ? 'block' : 'none';
+            console.log("Payment popup toggled");
+        } else {
+            console.error("Payment popup element not found");
+        }
     }
 
     // Modify the existing selectTopup function

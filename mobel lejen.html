@@ -124,7 +124,7 @@
     </p>
     <div id="whatsappErrorMessage" style="color: red; display: none; margin-top: 5px;">Harap isi nomor WhatsApp sebelum melanjutkan.</div>
     <div class="g-recaptcha" data-sitekey="YOUR_SITE_KEY"></div>
-    <button onclick="validateAndSubmit()" style="margin-top: 10px; background-color: #e00047; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; transition: background-color 0.3s;">Beli Sekarang</button>
+    <button onclick="handlePayment()" style="margin-top: 10px; background-color: #e00047; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; transition: background-color 0.3s;">Beli Sekarang</button>
 </div>      
                         </div>
                     </form>
@@ -278,17 +278,17 @@
 
         if (whatsappNumber === '') {
             errorMessage.style.display = 'block';
+            return false; // Prevent form submission
         } else {
             errorMessage.style.display = 'none';
-            // Proceed with form submission or payment process
-            handlePayment(event);
+            handlePayment();
+            return true;
         }
     }
 
     // Modify the existing handlePayment function
-    function handlePayment(event) {
-        event.preventDefault();
-        if (validateUserData() && document.getElementById('whatsappNumber').value.trim() !== '') {
+    function handlePayment() {
+        if (validateUserData() && validateAndSubmit()) {
             const selectedTopup = document.getElementById('selectedTopup').value;
             if (selectedTopup) {
                 togglePaymentPopup();

@@ -320,12 +320,38 @@
         console.log("Showing payment popup");
         const paymentPopup = document.getElementById('paymentPopup');
         if (paymentPopup) {
+            const selectedTopup = document.getElementById('selectedTopup').value;
+            const totalPrice = document.getElementById('totalPrice');
+            
+            // Set the total price based on the selected top-up
+            switch(selectedTopup) {
+                case '5 Diamonds':
+                    totalPrice.textContent = 'Rp 5,000';
+                    break;
+                case '10 Diamonds':
+                    totalPrice.textContent = 'Rp 10,000';
+                    break;
+                case '50 Diamonds':
+                    totalPrice.textContent = 'Rp 50,000';
+                    break;
+                case '100 Diamonds':
+                    totalPrice.textContent = 'Rp 100,000';
+                    break;
+                case '500 Diamonds':
+                    totalPrice.textContent = 'Rp 500,000';
+                    break;
+                case '1000 Diamonds':
+                    totalPrice.textContent = 'Rp 1,000,000';
+                    break;
+                default:
+                    totalPrice.textContent = 'N/A';
+            }
+            
             paymentPopup.style.display = 'block';
             console.log("Payment popup shown");
         } else {
             console.error("Payment popup element not found");
         }
-    }
 
     // Modify the existing selectTopup function
     function selectTopup(topupName) {

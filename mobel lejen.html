@@ -227,6 +227,7 @@
         }
     }
 
+ 
     function selectPaymentMethod(option) {
         // Menghapus tanda centang dari semua opsi
         const options = document.querySelectorAll('.payment-option');
@@ -312,7 +313,7 @@
         }
 
         console.log("All validations passed, proceeding to payment");
-        showPaymentPopup(); // Changed from togglePaymentPopup to showPaymentPopup
+        showPaymentPopup();
     }
 
     function showPaymentPopup() {
@@ -326,27 +327,17 @@
         }
     }
 
-    // Make sure this function is present to handle the close button in the payment popup
-    function togglePaymentPopup() {
-        const paymentPopup = document.getElementById('paymentPopup');
-        if (paymentPopup) {
-            if (paymentPopup.style.display === 'block') {
-                closePaymentPopup();
-            } else {
-                showPaymentPopup();
-            }
-        } else {
-            console.error("Payment popup element not found");
-        }
-    }
-
     // Modify the existing selectTopup function
     function selectTopup(topupName) {
+        console.log("selectTopup called with:", topupName);
         if (validateUserData()) {
             document.getElementById('selectedTopup').value = topupName;
             document.getElementById('topupName').textContent = topupName;
             document.getElementById('selectedTopupDisplay').style.display = 'block';
             document.getElementById('paymentMethods').style.display = 'block';
+            console.log("Top-up selected:", topupName);
+        } else {
+            console.log("User data validation failed in selectTopup");
         }
     }
 </script>

@@ -247,7 +247,7 @@
         document.getElementById('selectedTopupDisplay').style.display = 'none'; // Menyembunyikan box top-up yang dipilih
     }
 
-    function validateUserData() {
+     function validateUserData() {
         const userId = document.getElementById('userId').value.trim();
         const zoneId = document.getElementById('zoneId').value.trim();
         const errorMessage = document.getElementById('errorMessage');
@@ -261,6 +261,44 @@
         }
     }
 
+    function validateWhatsApp() {
+        const whatsappNumber = document.getElementById('whatsappNumber').value.trim();
+        const errorMessage = document.getElementById('whatsappErrorMessage');
+
+        if (whatsappNumber === '') {
+            errorMessage.style.display = 'block';
+            return false;
+        } else {
+            errorMessage.style.display = 'none';
+            return true;
+        }
+    }
+
+    function validateTopUp() {
+        const selectedTopup = document.getElementById('selectedTopup').value;
+        return selectedTopup !== '';
+    }
+
+    function handlePayment() {
+        if (!validateUserData()) {
+            alert('Harap isi User ID dan Zone ID terlebih dahulu.');
+            return;
+        }
+
+        if (!validateWhatsApp()) {
+            alert('Harap isi nomor WhatsApp terlebih dahulu.');
+            return;
+        }
+
+        if (!validateTopUp()) {
+            alert('Silakan pilih nominal top-up terlebih dahulu.');
+            return;
+        }
+
+        // If all validations pass, proceed with payment
+        togglePaymentPopup();
+    }
+
     // Modify the existing selectTopup function
     function selectTopup(topupName) {
         if (validateUserData()) {
@@ -268,35 +306,6 @@
             document.getElementById('topupName').textContent = topupName;
             document.getElementById('selectedTopupDisplay').style.display = 'block';
             document.getElementById('paymentMethods').style.display = 'block';
-        }
-    }
-
-    // Add this function to your existing <script> tag or script file
-    function validateAndSubmit() {
-        const whatsappNumber = document.getElementById('whatsappNumber').value.trim();
-        const errorMessage = document.getElementById('whatsappErrorMessage');
-
-        if (whatsappNumber === '') {
-            errorMessage.style.display = 'block';
-            return false; // Prevent form submission
-        } else {
-            errorMessage.style.display = 'none';
-            handlePayment();
-            return true;
-        }
-    }
-
-    // Modify the existing handlePayment function
-    function handlePayment() {
-        if (validateUserData() && validateAndSubmit()) {
-            const selectedTopup = document.getElementById('selectedTopup').value;
-            if (selectedTopup) {
-                togglePaymentPopup();
-            } else {
-                alert('Silakan pilih nominal top-up terlebih dahulu.');
-            }
-        } else {
-            alert('Harap isi semua data yang diperlukan sebelum melanjutkan.');
         }
     }
 </script>

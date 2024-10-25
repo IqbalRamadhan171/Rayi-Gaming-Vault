@@ -291,28 +291,20 @@
         return selectedTopup !== '';
     }
 
+    
     function handlePayment() {
         console.log("handlePayment function called");
+        const whatsappNumber = document.getElementById('whatsappNumber').value.trim();
+        const errorMessage = document.getElementById('whatsappErrorMessage');
 
-        if (!validateUserData()) {
-            console.log("User data validation failed in handlePayment");
-            alert('Harap isi User ID dan Zone ID terlebih dahulu.');
+        if (whatsappNumber === '') {
+            console.log("WhatsApp validation failed");
+            errorMessage.style.display = 'block';
             return;
         }
 
-        if (!validateWhatsApp()) {
-            console.log("WhatsApp validation failed in handlePayment");
-            alert('Harap isi nomor WhatsApp terlebih dahulu.');
-            return;
-        }
-
-        if (!validateTopUp()) {
-            console.log("Top-up validation failed in handlePayment");
-            alert('Silakan pilih nominal top-up terlebih dahulu.');
-            return;
-        }
-
-        console.log("All validations passed, proceeding to payment");
+        errorMessage.style.display = 'none';
+        console.log("WhatsApp validation passed, proceeding to payment");
         showPaymentPopup();
     }
 
@@ -352,6 +344,7 @@
         } else {
             console.error("Payment popup element not found");
         }
+    }
 
     // Modify the existing selectTopup function
     function selectTopup(topupName) {
